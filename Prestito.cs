@@ -9,16 +9,16 @@ namespace csharp_biblioteca
     internal class Prestito : Stato
     {
         public string sNumero { get; set; }
-        public DateTime dtDal { get; set; }
-        public DateTime dtAl { get; set; }
+        public DateTime dtInizioPrestito { get; set; }
+        public DateTime dtFinePrestito { get; set; }
         public Utente cUtente { get; set; }
         public Documento cDocumento { get; set; }
 
-        public Prestito(string sNumero, DateTime dtDal, DateTime dtAl, Utente cUtente, Documento cDocumento,bool bDisponibile) : base(bDisponibile)
+        public Prestito(string sNumero, DateTime dtInizioPrestito, DateTime dtFinePrestito, Utente cUtente, Documento cDocumento,bool bDisponibile) : base(bDisponibile)
         {
             this.sNumero = sNumero;
-            this.dtDal = dtDal;
-            this.dtAl = dtAl;
+            this.dtInizioPrestito = dtInizioPrestito;
+            this.dtFinePrestito = dtFinePrestito;
             this.cUtente = cUtente;
             this.cDocumento = cDocumento;
         }
@@ -27,8 +27,8 @@ namespace csharp_biblioteca
         {
             return string.Format("Numero:{0}\nDal:{1}\nAl:{2}\nStato:{3}\nUtente:\n{4}\nDocumento:\n{5}\n{6}",
                 this.sNumero,
-                this.dtDal,
-                this.dtAl,
+                this.dtInizioPrestito,
+                this.dtFinePrestito,
                 this.cUtente,
                 this.cDocumento,
                 base.ToString());

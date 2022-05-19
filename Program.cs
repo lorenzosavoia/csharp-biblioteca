@@ -19,10 +19,22 @@ namespace csharp_biblioteca // Note: actual namespace depends on the project nam
             doc1.Scaffale = s1;
             Console.WriteLine(doc1.ToString());
 
-            string sCodice; string sTitolo; int iAnno; string sSettore;
+            
             //variabili per utenti
             string sNome; string sCognome; string sTelefono; string sPassword;string sEmail;
             bool bFinito = false;
+            
+            List<string> lsUtentiSR = new List<string>();
+            if(lsUtentiSR.Count() !=0)
+            {
+                    StreamReader sr = new StreamReader("utenti-biblioteca.txt");
+               string sRiga = sr.ReadLine();
+                 while(sRiga!= null)
+                    {
+                        lsUtentiSR.Add(sRiga);
+                    }
+            }
+            
             
             while(!bFinito)
             {
@@ -48,9 +60,15 @@ namespace csharp_biblioteca // Note: actual namespace depends on the project nam
                         break;
                         case "2":
                         {
+                            Console.WriteLine("Utenti registrati in questa sessione:");
                             foreach(Utente Utente in Belgioioso.lsUtenti)
                             {
                                 Console.WriteLine(Utente.ToString());
+                            }
+                            Console.WriteLine("Utenti registrati in precedenza:");
+                            foreach (string utente in lsUtentiSR)
+                            {
+                                Console.WriteLine(utente);
                             }
                         }
                         break;
