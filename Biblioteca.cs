@@ -24,5 +24,27 @@ namespace csharp_biblioteca
             this.lsPrestiti = new List<Prestito>();
             this.lsUtenti = new List<Utente>();
         }
+        public bool RestoreUtenti(string sFileName)
+        {
+            StreamReader sr = new StreamReader(sFileName);
+            string sFileVero = sr.ReadLine();
+            sr.Close();
+            string sRiga;
+            List<Utente> lsUtenti = new List<Utente>();
+            while((sRiga = sr.ReadLine()) != null)
+            {
+                string[] vString = sRiga.Split(";");
+                string sNome = vString[0];
+                string sCognome = vString[1];
+                string sTelefono = vString[2];
+                string sEmail = vString[3];
+                string sPassword = vString[4];
+
+                Utente utente = new Utente(sNome, sCognome, sTelefono, sEmail, sPassword);
+                lsUtenti.Add(utente);
+            }
+            return true;
+
+        }
     }
 }
