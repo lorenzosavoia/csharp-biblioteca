@@ -19,7 +19,7 @@ namespace csharp_biblioteca
 
         public override string ToString()
         {
-            return string.Format("Nome:{0}\n Cognome:{1}",
+            return string.Format("\nNome:{0}\n Cognome:{1}",
                                  this.sNome,
                                  this.sCognome);
         }

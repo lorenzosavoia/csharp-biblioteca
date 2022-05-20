@@ -22,7 +22,7 @@ namespace csharp_biblioteca
         //classe con la finalitá di stampare persona ereditando da utente
         public override string ToString()
         {
-            return string.Format("{0}\n Telefono:{1}\n Email:{2}\n Password{3}",
+            return string.Format("{0}\n Telefono:{1}\n Email:{2}\n Password:{3}",
                                 base.ToString(),
                                 this.sTelefono,
                                 this.sEmail,

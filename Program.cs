@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace csharp_biblioteca // Note: actual namespace depends on the project name.
 {
@@ -10,32 +11,118 @@ namespace csharp_biblioteca // Note: actual namespace depends on the project nam
     {
         static void Main(string[] args)
         {
+            //gestione file di configurazione
+            string vPublicEnv = Environment.GetEnvironmentVariable("PUBLIC");
+            if (vPublicEnv != null)
+            {
+                Console.WriteLine("valore: {0}",vPublicEnv);
+            }  
+            if (Directory.Exists(vPublicEnv + "\\Biblioteca"))
+            {
+                Console.WriteLine("la directory é giá esistente");
+
+                if (File.Exists(vPublicEnv + "\\Biblioteca" + "\\biblioteca.txt"))
+                {
+                    Console.WriteLine("il file .txt esiste giá");
+                }
+                else
+                {
+                    Console.WriteLine("Immetti percorso file oppure premi invio");
+                    string sFileTxt = Console.ReadLine();
+                    if (sFileTxt == "")
+                    {
+                        StreamWriter sw = new StreamWriter(vPublicEnv + "\\Biblioteca" + "\\biblioteca.txt");
+                        sw.Write("section:fileConfig;");
+                        sw.Write(vPublicEnv + "\\Biblioteca" + "\\biblioteca.txt");
+                        Console.WriteLine("il file .txt é stato creato");
+                        sw.Close();
+                    }
+                    else
+                    {
+                        StreamWriter sw = new StreamWriter(vPublicEnv + "\\Biblioteca" + "\\biblioteca.txt");
+                        sw.Write("section:fileConfig;");
+                        sw.Write(sFileTxt);
+                        Console.WriteLine("il file .txt é stato creato.");
+                        sw.Close ();
+                    }
+
+                }
+            }
+            else
+            {
+                Console.WriteLine("la cartella non esiste crearla ora? S/N");
+                string choise = Console.ReadLine();
+                switch(choise)
+                {
+                    case "s":
+                        {
+                            Directory.CreateDirectory(vPublicEnv + "\\Biblioteca");
+                            Console.WriteLine("la directory Biblioteca é stata creata");
+                            Console.WriteLine("Immetti percorso file oppure premi invio");
+                            string sFileTxt = Console.ReadLine();
+                            if (sFileTxt == "")
+                            {
+                                StreamWriter sw = new StreamWriter(vPublicEnv + "\\Biblioteca" + "\\biblioteca.txt");
+                                sw.Write("section:fileConfig;");
+                                sw.Write(vPublicEnv + "\\Biblioteca" + "\\biblioteca.txt");
+                                Console.WriteLine("il file .txt é stato creato");
+                                sw.Close();
+                            }
+                            else
+                            {
+                                StreamWriter sw = new StreamWriter(vPublicEnv + "\\Biblioteca" + "\\biblioteca.txt");
+                                sw.Write("section:fileConfig;");
+                                sw.Write(sFileTxt);
+                                Console.WriteLine("il file .txt é stato creato.");
+                                sw.Close();
+                            }
+                        }
+                        break;
+                    case "n":
+                        {
+                            Console.WriteLine("la cartella non é stata creata");
+                            
+                        }
+                        break;
+                }  
+            }
+            
             Biblioteca Belgioioso = new Biblioteca("Biblioteca comunale");
+            
             Scaffale s1 = new Scaffale("1");
             Autore autore1 = new Autore("dante", "palle");
             Libro doc1 = new Libro("123123", "ciao sono il titolo", 2021, "geografia",142);
             
             doc1.sAutore.Add(autore1);
             doc1.Scaffale = s1;
-            Console.WriteLine(doc1.ToString());
+            //Console.WriteLine(doc1.ToString());
 
-            
-            //variabili per utenti
-            string sNome; string sCognome; string sTelefono; string sPassword;string sEmail;
-            bool bFinito = false;
-            
+            //dichiaro lista da compilare col readline
             List<string> lsUtentiSR = new List<string>();
-            if(lsUtentiSR.Count() !=0)
+            //vado a popolare la lista con i file precendentemente salvati su un file
+            //adotto un try chatch per gli errori
+            try
             {
-                    StreamReader sr = new StreamReader("utenti-biblioteca.txt");
-               string sRiga = sr.ReadLine();
-                 while(sRiga!= null)
+                if (File.Exists(vPublicEnv + "\\Biblioteca" + "\\biblioteca-utenti.txt"))
+                {
+                    string sRiga;
+                    using (StreamReader sr = new StreamReader(vPublicEnv + "\\Biblioteca" + "\\biblioteca-utenti.txt"))
                     {
-                        lsUtentiSR.Add(sRiga);
+                        while ((sRiga = sr.ReadLine()) != null)
+                        {
+                            lsUtentiSR.Add(sRiga);
+                        }
                     }
+                }
+
             }
-            
-            
+            catch(Exception e)
+            {
+                Console.WriteLine("The process failed: {0}", e.ToString());
+            }
+
+            //dichiaro la variabile per il ciclo while
+            bool bFinito = false;
             while(!bFinito)
             {
                 Console.WriteLine("1-Aggiungi Utente 2-Stampa lista utenti 9- Esci dall'app");
@@ -45,15 +132,15 @@ namespace csharp_biblioteca // Note: actual namespace depends on the project nam
                     case "1":
                         {
                             Console.WriteLine("inserisci nome");
-                            sNome = Console.ReadLine();
+                            string sNome = Console.ReadLine();
                             Console.WriteLine("inserisci cognome");
-                            sCognome = Console.ReadLine();
+                            string sCognome = Console.ReadLine();
                             Console.WriteLine("inserisci telefono");
-                            sTelefono = Console.ReadLine();
+                            string sTelefono = Console.ReadLine();
                             Console.WriteLine("inserisci Email");
-                            sEmail = Console.ReadLine();
+                            string sEmail = Console.ReadLine();
                             Console.WriteLine("inserisci Password");
-                            sPassword = Console.ReadLine();
+                            string sPassword = Console.ReadLine();
 
                             Belgioioso.lsUtenti.Add(new Utente(sNome, sCognome, sTelefono, sEmail, sPassword));
                         }
@@ -65,6 +152,7 @@ namespace csharp_biblioteca // Note: actual namespace depends on the project nam
                             {
                                 Console.WriteLine(Utente.ToString());
                             }
+                            
                             Console.WriteLine("Utenti registrati in precedenza:");
                             foreach (string utente in lsUtentiSR)
                             {
@@ -74,13 +162,13 @@ namespace csharp_biblioteca // Note: actual namespace depends on the project nam
                         break;
                         case "9":
                         {
-                            StreamWriter sm = new StreamWriter("Utenti-bliblioteca.txt");
+                            StreamWriter sm = new StreamWriter(vPublicEnv + "\\Biblioteca" + "\\biblioteca-utenti.txt");
                             foreach(Utente utente in Belgioioso.lsUtenti)
                             {
-                                string new_string = utente.sNome + ";" + utente.sCognome + ";" + utente.sTelefono + ";" + utente.sEmail;
-                                sm.WriteLine(new_string);
+                                sm.WriteLine(utente.ToString());
                             }
                             sm.Close();
+                            Environment.Exit(0);
                             bFinito = true;
                         }
                         break;
